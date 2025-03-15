@@ -1,0 +1,52 @@
+{
+	"name": "common-devcontainer",
+	"build": {
+		"dockerfile": "Dockerfile"
+	},
+	// 👇 Features to add to the Dev Container. More info: https://containers.dev/implementors/features.
+	// "features": {},
+	// 👇 Use 'forwardPorts' to make a list of ports inside the container available locally.
+	// "forwardPorts": [],
+	// 👇 Use 'postCreateCommand' to run commands after the container is created.
+	// "postCreateCommand": "",
+	// 👇 Configure tool-specific properties.
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"ms-python.python",
+				"njpwerner.autodocstring",
+				"ms-python.vscode-pylance",
+				"charliermarsh.ruff",
+				"tamasfe.even-better-toml",
+				"mhutchie.git-graph"
+			],
+			"settings": {
+				"python.defaultInterpreterPath": "/home/vscode/.pyenv/shims/python",
+				"python.analysis.typeCheckingMode": "strict",
+				"editor.formatOnSave": true,
+				"files.insertFinalNewline": true,
+				"editor.codeActionsOnSave": {
+					"source.fixAll": "explicit",
+					"source.organizeImports": "explicit"
+				},
+				"editor.rulers": [
+					120
+				],
+				"[python]": {
+					"editor.defaultFormatter": "charliermarsh.ruff"
+				}
+			}
+		},
+		"remoteUser": "vscode",
+		"features": {
+			"ghcr.io/devcontainers/features/git:1": {},
+			"ghcr.io/devcontainers/features/github-cli:1": {}
+		},
+		"remoteEnv": {
+			"DISPLAY": "host.docker.internal:0"
+		},
+		"mounts": [
+			"source=/tmp/.X11-unix,target=/tmp/.X11-unix,type=bind,consistency=cached"
+		]
+	}
+}
