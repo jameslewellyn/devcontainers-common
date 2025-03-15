@@ -4,6 +4,7 @@ ARG USER=vscode
 
 RUN DEBIAN_FRONTEND=noninteractive \
     && apt-get update \ 
+    && apt-get upgrade -y \ 
     && apt-get install -y \
     build-essential \
     ca-certificates \
@@ -29,11 +30,36 @@ RUN DEBIAN_FRONTEND=noninteractive \
 
 USER $USER
 ARG HOME="/home/$USER"
-ARG PYTHON_VERSION=3.13
 
+# Install Rust using rustup
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+ENV PATH="${HOME}/.cargo/bin:${PATH}"
+
+RUN cargo install \
+    cargo-audit \
+    cargo-edit \
+    cargo-fmt \
+    cargo-make \
+    cargo-outdated \
+    cargo-tree \
+    cargo-watch
+
+# Install Python using pyenv
+ARG PYTHON_VERSION=3.13
 ENV PYENV_ROOT="${HOME}/.pyenv"
 ENV PATH="${PYENV_ROOT}/shims:${PYENV_ROOT}/bin:${HOME}/.local/bin:$PATH"
 
 RUN curl https://pyenv.run | bash
 RUN pyenv install ${PYTHON_VERSION} && pyenv global ${PYTHON_VERSION}
 RUN pip install uv
+
+# Install User Packages
+RUN cargo install \
+    bat \
+    fd-find \
+    ripgrep \
+    sd \
+    starship \
+    tealdeer \
+    zellij
+
